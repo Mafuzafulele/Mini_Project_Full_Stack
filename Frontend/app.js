@@ -1,1 +1,31 @@
-console.log("Hello World");
+const fetchAPI = async () => {
+  let response = await fetch("https://jsonplaceholder.typicode.com/comments");
+  let comments = await response.json();
+  createCards(comments.slice(0, 48));
+};
+
+const createCards = (comments) => {
+  let container = document.getElementById("comments");
+  let gridRow = document.createElement("div");
+  gridRow.classList.add("row");
+  gridRow.classList.add("gap-3");
+  comments.forEach((comment) => {
+    let card = document.createElement("div");
+    card.classList.add("card");
+    card.classList.add("col-3");
+    card.innerHTML = `
+    <img class="card-img-top" src="https://picsum.photos/id/${Math.floor(
+      Math.random() * (50 - 1 + 1) + 1
+    )}/200/150" alt="random image">  
+      <div class="card-body">
+        <h5 class="card-title">${comment.name}</h5>
+        <p class="card-text">${comment.body}</p>
+        <a href="#" class="btn btn-primary">Go</a>
+      </div>
+    `;
+    gridRow.appendChild(card);
+    container.appendChild(gridRow);
+  });
+};
+
+fetchAPI();
