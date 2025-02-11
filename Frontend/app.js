@@ -1,9 +1,3 @@
-const fetchAPI = async () => {
-  let response = await fetch("https://jsonplaceholder.typicode.com/comments");
-  let comments = await response.json();
-  createCards(comments.slice(0, 48));
-};
-
 const createCards = (comments) => {
   let container = document.getElementById("comments");
   let gridRow = document.createElement("div");
@@ -28,4 +22,28 @@ const createCards = (comments) => {
   });
 };
 
-fetchAPI();
+const jsonplaceholderFetch = async () => {
+  try {
+    let response = await fetch("https://jsonplaceholder.typicode.com/comments");
+    return await response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const localServerFetch = async () => {
+  try {
+    let response = await fetch("./comments.json");
+    return await response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+funcBuild = async () => {
+  // let data = await jsonplaceholderFetch();
+  let data = await localServerFetch();
+  createCards(data.slice(0, 48));
+};
+
+funcBuild();
