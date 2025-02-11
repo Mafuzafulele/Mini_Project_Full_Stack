@@ -40,10 +40,21 @@ const localServerFetch = async () => {
   }
 };
 
+const restAPIFetch = async () => {
+  try {
+    let response = await fetch("http://localhost:8080/");
+    let temp = await response.json();
+    console.log(temp);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 funcBuild = async () => {
   // let data = await jsonplaceholderFetch();
   let data = await localServerFetch();
   createCards(data.slice(0, 48));
 };
 
-funcBuild();
+// funcBuild();
+restAPIFetch();
