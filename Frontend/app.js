@@ -47,7 +47,6 @@ const restAPIFetch = async () => {
   try {
     let response = await fetch("http://localhost:8080/comments");
     let data = await response.json();
-    // console.log(data);
     return data;
   } catch (err) {
     console.log(err);
@@ -99,6 +98,7 @@ funcBuild = async () => {
   // let data = await localServerFetch();
   // createCards(data.slice(0, 48));
   let data = await restAPIFetch();
+  // console.log(data);
   createCards(data.comments);
 };
 
