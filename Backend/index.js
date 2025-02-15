@@ -1,7 +1,7 @@
 import "colors";
 import express from "express"; // node js frameworked used to build out applications
 import morgan from "morgan"; // logs to the console http resquests
-// import connectDB from "./_mongoDB"; // mongo DB connection
+import db from "./database.js";
 import bodyParser from "body-parser";
 import cors from "cors"; // Cross-Origin Resource Sharing - for commincating with web server - trusted routes i.e. http://localhost:3000
 import helmet from "helmet"; // HTTP Headers
@@ -36,9 +36,44 @@ app.use(
   })
 );
 
-// connectDB();
 app.get("/", (req, res) => {
   res.json({ message: "Hello, World!" });
+});
+
+app.get("/comments", (req, res) => {
+  const query = "SELECT * FROM comments";
+  const comments = db.prepare(query).all();
+  res.json({ comments: comments });
+});
+
+app.post("/comments", (req, res) => {
+  try {
+    // console.log(req.body);
+    const { name, email, body } = req.body;
+
+    if (!name || !email || !body) {
+      return res.status(400).json({ error: "Missing data" });
+    }
+
+    const sql = db.prepare(
+      "INSERT INTO comments (name,email,body) VALUES (?,?,?)"
+    );
+    sql.run(name, email, body);
+    const query = "SELECT * FROM comments";
+    const comments = db.prepare(query).all();
+    res.status(201).json({ comments: comments });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put("/comments", (req, res) => {
+  // Code to update a comment
+});
+
+app.delete("/comments", (req, res) => {
+  // Code to delete a comment
 });
 
 const PORT = process.env.PORT || 8080;
